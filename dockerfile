@@ -9,8 +9,10 @@ WORKDIR /app
 COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
+# THE FIX: Create a shortcut copy of vnc.html named index.html so the server loads it automatically
+RUN cp /usr/share/novnc/vnc.html /usr/share/novnc/index.html
+
 # Render assigns a random port dynamically via the $PORT variable
-# This starts the virtual canvas and maps the stream directly to it
 CMD Xvfb :99 -screen 0 1024x768x16 & \
     sleep 2 && \
     x11vnc -display :99 -nopw -forever -shared & \
