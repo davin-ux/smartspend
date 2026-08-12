@@ -21,3 +21,11 @@ CMD Xvfb :99 -screen 0 1024x768x16 & \
     websockify --web=/usr/share/novnc $PORT localhost:5900 --web-base=/vnc.html & \
     sleep 2 && \
     python app.py
+# Replace the last line of your Dockerfile with this:
+CMD Xvfb :99 -screen 0 1024x768x16 & \
+    sleep 3 && \
+    x11vnc -display :99 -nopw -forever -shared -bg & \
+    sleep 3 && \
+    websockify --web=/usr/share/novnc $PORT localhost:5900 --web-base=/vnc.html & \
+    sleep 2 && \
+    python app.py 2>&1
