@@ -9,13 +9,11 @@ WORKDIR /app
 COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
-# THE FIX: Create a shortcut copy of vnc.html named index.html so the server loads it automatically
-RUN cp /usr/share/novnc/vnc.html /usr/share/novnc/index.html
-
 # Render assigns a random port dynamically via the $PORT variable
+# We add '/vnc.html' directly inside the launch command to force it to open
 CMD Xvfb :99 -screen 0 1024x768x16 & \
     sleep 2 && \
     x11vnc -display :99 -nopw -forever -shared & \
-    websockify --web=/usr/share/novnc $PORT localhost:5900 & \
+    websockify --web=/usr/share/novnc $PORT localhost:5900 --web-base=/vnc.html & \
     export DISPLAY=:99 && \
     python app.py
