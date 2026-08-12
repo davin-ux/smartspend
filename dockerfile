@@ -9,11 +9,15 @@ WORKDIR /app
 COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Render assigns a random port dynamically via the $PORT variable
-# We add '/vnc.html' directly inside the launch command to force it to open
+# Explicitly assign the DISPLAY variable globally
+ENV DISPLAY=:99
+
+# The command runs the virtual window buffer first, configures VNC, 
+# then boots your python app, giving each stage time to breathe.
 CMD Xvfb :99 -screen 0 1024x768x16 & \
-    sleep 2 && \
-    x11vnc -display :99 -nopw -forever -shared & \
+    sleep 3 && \
+    x11vnc -display :99 -nopw -forever -shared -bg & \
+    sleep 3 && \
     websockify --web=/usr/share/novnc $PORT localhost:5900 --web-base=/vnc.html & \
-    export DISPLAY=:99 && \
+    sleep 2 && \
     python app.py
