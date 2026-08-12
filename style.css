@@ -1,0 +1,127 @@
+:root{
+  --bg-dark:#101418; --sidebar-dark:#161B22; --card-dark:#1B212B;
+  --primary:#4C6FFF; --primary-hover:#3D5AE0;
+  --success:#2ECC71; --danger:#FF5C5C; --warning:#FFB020;
+  --text-dark:#EAEAEA; --text-muted:#8A94A6; --border:#262C36;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+body{background:var(--bg-dark);color:var(--text-dark);min-height:100vh;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;border:none;}
+input,select,textarea{font-family:inherit;}
+
+/* ---------- AUTH ---------- */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background-image:url('/static/assets/backgrounds/auth_background.png');background-size:cover;background-position:center;}
+.auth-card{background:var(--card-dark);border-radius:18px;width:100%;max-width:400px;padding:32px 28px;text-align:center;}
+.auth-logo{width:64px;height:64px;margin:0 auto 8px;display:block;}
+.auth-title{font-size:22px;font-weight:700;margin-bottom:2px;}
+.auth-sub{font-size:12px;color:var(--text-muted);margin-bottom:20px;}
+.field{width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-dark);
+  border-radius:10px;padding:11px 14px;font-size:14px;margin-bottom:10px;}
+.field:focus{outline:none;border-color:var(--primary);}
+.btn-primary{width:100%;background:var(--primary);color:#fff;border-radius:10px;padding:12px;
+  font-size:14px;font-weight:600;margin-top:6px;}
+.btn-primary:hover{background:var(--primary-hover);}
+.switch-line{font-size:12px;color:var(--text-muted);margin-top:16px;}
+.switch-link{color:var(--primary);font-weight:600;}
+
+/* ---------- FLASH MESSAGES ---------- */
+.flash{border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;}
+.flash-error{background:rgba(255,92,92,0.12);color:var(--danger);border:1px solid rgba(255,92,92,0.3);}
+.flash-success{background:rgba(46,204,113,0.12);color:var(--success);border:1px solid rgba(46,204,113,0.3);}
+
+/* ---------- APP SHELL ---------- */
+#appScreen{display:none;min-height:100vh;}
+#appScreen.active{display:flex;}
+.sidebar{width:220px;background:var(--sidebar-dark);flex-shrink:0;padding:24px 12px;min-height:100vh;}
+.brand{display:flex;align-items:center;gap:8px;padding:0 8px 20px;font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;}
+.brand-sub{font-size:11px;color:var(--text-muted);padding:0 8px 16px;white-space:nowrap;overflow:hidden;}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;background:transparent;color:var(--text-dark);
+  padding:11px 12px;border-radius:10px;font-size:13px;margin-bottom:4px;text-align:left;white-space:nowrap;overflow:hidden;}
+.nav-btn:hover{background:var(--card-dark);}
+.nav-btn.active{background:var(--primary);color:#fff;}
+.content{flex:1;padding:26px 32px;min-width:0;}
+.content-inner{max-width:1200px;margin:0 auto;}
+.page-title{font-size:22px;font-weight:700;}
+.page-sub{font-size:12px;color:var(--text-muted);margin-top:2px;margin-bottom:18px;}
+
+/* ---------- CARDS / GRIDS ---------- */
+.cards-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.stat-card{background:var(--card-dark);border-radius:14px;padding:14px 16px;}
+.stat-label{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.stat-value{font-size:19px;font-weight:700;}
+.card{background:var(--card-dark);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.card-title{font-size:14px;font-weight:700;margin-bottom:10px;}
+.row-item{display:flex;align-items:center;gap:10px;background:var(--bg-dark);border-radius:10px;
+  padding:10px 12px;margin-bottom:6px;}
+.row-item .icon{font-size:16px;}
+.row-item .info{flex:1;min-width:0;}
+.row-item .label{font-size:13px;font-weight:600;}
+.row-item .sub{font-size:11px;color:var(--text-muted);}
+.row-item .amt{font-size:13px;font-weight:700;white-space:nowrap;}
+.progress-track{background:var(--bg-dark);border-radius:8px;height:12px;overflow:hidden;margin:8px 0;}
+.progress-fill{height:100%;background:var(--primary);border-radius:8px;}
+.empty{text-align:center;color:var(--text-muted);font-size:12px;padding:20px 0;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-form-list{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start;}
+
+/* ---------- FORMS ---------- */
+.form-grid{display:flex;flex-direction:column;gap:8px;}
+label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.btn-row{display:flex;gap:8px;margin-top:6px;}
+.btn-save{flex:1;background:var(--success);color:#06341f;font-weight:700;border-radius:10px;padding:10px;font-size:13px;}
+.btn-save.expense{background:var(--danger);color:#3a0d0d;}
+.btn-save.primary{background:var(--primary);color:#fff;}
+.btn-save.warn{background:var(--warning);color:#3a2600;}
+.btn-cancel{flex:1;background:var(--border);color:var(--text-dark);border-radius:10px;padding:10px;font-size:13px;text-align:center;}
+.icon-btn{background:transparent;color:var(--text-muted);font-size:15px;padding:4px 6px;border-radius:6px;}
+.icon-btn:hover{background:var(--border);color:var(--text-dark);}
+.icon-btn.danger:hover{color:var(--danger);}
+.filter-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;}
+.filter-item{display:flex;flex-direction:column;gap:4px;}
+.filter-item .field{margin-bottom:0;width:auto;}
+
+.mobile-topbar{display:none;}
+
+/* ================================================================
+   BREAKPOINT 1 — TABLET (601px – 1024px)
+   ================================================================ */
+@media (max-width:1024px){
+  .sidebar{width:72px;padding:20px 10px;}
+  .sidebar .brand span:last-child,
+  .sidebar .brand-sub,
+  .sidebar .nav-btn span:last-child{display:none;}
+  .sidebar .brand{justify-content:center;padding:0 0 18px;}
+  .sidebar .nav-btn{justify-content:center;padding:12px 0;}
+  .content{padding:22px 20px;}
+  .cards-row{grid-template-columns:repeat(2,1fr);}
+  .two-col{grid-template-columns:1fr;}
+  .grid-form-list{grid-template-columns:1fr;}
+}
+
+/* ================================================================
+   BREAKPOINT 2 — PHONE (≤600px)
+   ================================================================ */
+@media (max-width:600px){
+  #appScreen.active{flex-direction:column;}
+  .sidebar{display:none;}
+  .mobile-topbar{display:flex;justify-content:space-between;align-items:center;
+    background:var(--sidebar-dark);padding:12px 16px;}
+  .mobile-nav{display:flex;overflow-x:auto;gap:6px;background:var(--sidebar-dark);padding:8px 10px;
+    position:sticky;top:0;z-index:5;}
+  .mobile-nav .nav-btn{white-space:nowrap;width:auto;flex-shrink:0;}
+  .content{padding:16px;}
+  .cards-row{grid-template-columns:1fr 1fr;gap:8px;}
+  .auth-card{padding:26px 20px;}
+  .filter-row{flex-direction:column;align-items:stretch;}
+}
+
+/* ================================================================
+   BREAKPOINT 3 — LARGE DESKTOP (≥1440px)
+   ================================================================ */
+@media (min-width:1440px){
+  .sidebar{width:250px;}
+  .content{padding:36px 48px;}
+  .content-inner{max-width:1320px;}
+}

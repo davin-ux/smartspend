@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} — Income{% endblock %}
+{% block content %}
+<div class="page-title">Income</div>
+<div class="page-sub">Log and review every rupee coming in.</div>
+
+<div class="grid-form-list">
+  <div class="card">
+    <div class="card-title">{{ 'Edit Income' if edit_record else 'Add Income' }}</div>
+    <form method="post" action="{{ url_for('income_save') }}" class="form-grid">
+      {% if edit_record %}<input type="hidden" name="income_id" value="{{ edit_record.income_id }}">{% endif %}
+      <select class="field" name="category_id">
+        {% for c in categories %}
+          <option value="{{ c.category_id }}" {{ 'selected' if edit_record and edit_record.category_id == c.category_id else '' }}>
+            {{ c.icon }} {{ c.name }}
+          </option>
+        {% endfor %}
+      </select>
+      <input class="field" type="number" step="0.01" name="amount" placeholder="Amount"
+             value="{{ edit_record.amount if edit_record else '' }}" required>
+      <input class="field" type="text" name="source" placeholder="Source (e.g. Company Ltd.)"
+             value="{{ edit_record.source if edit_record else '' }}" required>
+      <input class="field" type="date" name="date" value="{{ edit_record.date if edit_record else today }}" required>
+      <input class="field" type="text" name="note" placeholder="Note (optional)"
+             value="{{ edit_record.note if edit_record else '' }}">
+      <div class="btn-row">
+        <button class="btn-save" type="submit">Save</button>
+        {% if edit_record %}<a class="btn-cancel" href="{{ url_for('income_page') }}">Cancel</a>{% endif %}
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-title">All Income Records</div>
+    {% if records %}
+      {% for r in records %}
+        <div class="row-item">
+          <span class="icon">{{ r.category_icon or '💰' }}</span>
+          <div class="info">
+            <div class="label">{{ r.source }}</div>
+            <div class="sub">{{ r.category_name or 'Uncategorized' }} • {{ pretty_date(r.date) }}</div>
+          </div>
+          <div class="amt" style="color:var(--success)">+{{ fmt(r.amount, currency) }}</div>
+          <a class="icon-btn" href="{{ url_for('income_edit', income_id=r.income_id) }}">✏</a>
+          <form method="post" action="{{ url_for('income_delete', income_id=r.income_id) }}"
+                onsubmit="return confirm('Delete this income record?');" style="display:inline;">
+            <button class="icon-btn danger" type="submit">🗑</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">No income records yet.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

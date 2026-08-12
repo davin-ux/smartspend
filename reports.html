@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} — Reports{% endblock %}
+{% block content %}
+<div class="page-title">Reports</div>
+<div class="page-sub">Filter transactions and export to CSV.</div>
+
+<div class="card">
+  <form method="get" action="{{ url_for('reports_page') }}" class="filter-row">
+    <div class="filter-item">
+      <label>Type</label>
+      <select class="field" name="type">
+        {% for opt in ['All', 'Income', 'Expense'] %}
+          <option value="{{ opt }}" {{ 'selected' if ttype == opt else '' }}>{{ opt }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>From</label>
+      <input class="field" type="date" name="start" value="{{ start }}">
+    </div>
+    <div class="filter-item">
+      <label>To</label>
+      <input class="field" type="date" name="end" value="{{ end }}">
+    </div>
+    <button class="btn-save primary" style="flex:none;padding:11px 18px;" type="submit">Apply Filter</button>
+    <a class="btn-save" style="flex:none;padding:11px 18px;background:var(--success);color:#06341f;display:inline-block;text-align:center;"
+       href="{{ url_for('reports_export', type=ttype, start=start, end=end) }}">Export CSV</a>
+  </form>
+</div>
+
+<div class="card">
+  <div style="font-size:13px;color:var(--text-muted);">
+    {{ results|length }} transactions • Income: {{ fmt(total_in, currency) }} •
+    Expense: {{ fmt(total_out, currency) }} • Net: {{ fmt(net, currency) }}
+  </div>
+</div>
+
+<div class="card">
+  {% if results %}
+    {% for r in results %}
+      <div class="row-item">
+        <span style="font-size:9px;font-weight:700;color:{{ 'var(--success)' if r.type == 'Income' else 'var(--danger)' }};width:44px;">{{ r.type }}</span>
+        <div class="info">
+          <div class="label">{{ r.label }}</div>
+          <div class="sub">{{ r.category or 'Uncategorized' }} • {{ pretty_date(r.date) }}</div>
+        </div>
+        <div class="amt" style="color:{{ 'var(--success)' if r.type == 'Income' else 'var(--danger)' }}">
+          {{ '+' if r.type == 'Income' else '-' }}{{ fmt(r.amount, currency) }}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">No transactions found for this filter.</div>
+  {% endif %}
+</div>
+{% endblock %}

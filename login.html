@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} — Log In{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <img class="auth-logo" src="{{ url_for('static', filename='assets/logo.png') }}" alt="SmartSpend logo">
+    <div class="auth-title">{{ APP_NAME }}</div>
+    <div class="auth-sub">Track it. Understand it. Own it.</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('login') }}">
+      <input class="field" type="text" name="username" placeholder="Username" required>
+      <input class="field" type="password" name="password" placeholder="Password" required>
+      <button class="btn-primary" type="submit">Log In</button>
+    </form>
+    <div class="switch-line">New here? <a class="switch-link" href="{{ url_for('register') }}">Create an account</a></div>
+  </div>
+</div>
+{% endblock %}

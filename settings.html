@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} — Settings{% endblock %}
+{% block content %}
+<div class="page-title">Settings</div>
+<div class="page-sub">Personalize how SmartSpend works for you.</div>
+
+<div class="card">
+  <div class="card-title">Currency</div>
+  <form method="post" action="{{ url_for('settings_page') }}" class="filter-row">
+    <input type="hidden" name="form_name" value="currency">
+    <select class="field" name="currency" style="width:160px;">
+      {% for code, symbol in currencies.items() %}
+        <option value="{{ code }}" {{ 'selected' if current_user.currency == code else '' }}>{{ code }} ({{ symbol }})</option>
+      {% endfor %}
+    </select>
+    <button class="btn-save primary" style="flex:none;padding:11px 18px;" type="submit">Save Currency</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-title">Monthly Budget</div>
+  <form method="post" action="{{ url_for('settings_page') }}" class="filter-row">
+    <input type="hidden" name="form_name" value="budget">
+    <input class="field" type="number" step="0.01" name="budget" placeholder="e.g. 15000"
+           value="{{ current_user.monthly_budget or '' }}" style="width:180px;">
+    <button class="btn-save primary" style="flex:none;padding:11px 18px;" type="submit">Save Budget</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-title">Session</div>
+  <a class="btn-save" style="background:var(--danger);color:#3a0d0d;display:inline-block;text-align:center;padding:10px 20px;"
+     href="{{ url_for('logout') }}">Log Out</a>
+</div>
+{% endblock %}

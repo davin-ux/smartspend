@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} — Account Created{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:center;min-height:70vh;">
+  <div class="card" style="max-width:420px;text-align:center;padding:40px 32px;">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(46,204,113,0.15);
+                display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+      <span style="font-size:36px;">✅</span>
+    </div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:8px;">Account created!</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:26px;line-height:1.5;">
+      Welcome, {{ current_user.full_name.split(' ')[0] }} 👋<br>
+      Your email is verified and your SmartSpend account is ready to go.
+    </div>
+    <a class="btn-save primary" style="display:block;padding:12px;" href="{{ url_for('dashboard') }}">
+      Go to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

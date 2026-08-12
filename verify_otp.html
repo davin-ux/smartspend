@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} — Verify Email{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div style="font-size:40px;margin-bottom:6px;">📧</div>
+    <div class="auth-title">Verify your email</div>
+    <div class="auth-sub">
+      We sent a 6-digit code to <strong>{{ email }}</strong>.<br>
+      Enter it below to verify your account.
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('verify_otp') }}">
+      <input class="field" type="text" name="code" placeholder="6-digit code" maxlength="6"
+             inputmode="numeric" pattern="[0-9]*" autofocus required
+             style="text-align:center;font-size:20px;letter-spacing:4px;">
+      <button class="btn-primary" type="submit">Verify</button>
+    </form>
+
+    <form method="post" action="{{ url_for('verify_otp_resend') }}" style="margin-top:10px;">
+      <button class="switch-link" type="submit" style="background:none;font-size:12px;">Resend code</button>
+    </form>
+
+    <div class="switch-line"><a class="switch-link" href="{{ url_for('logout') }}">Cancel and go back to login</a></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} — Expenses{% endblock %}
+{% block content %}
+<div class="page-title">Expenses</div>
+<div class="page-sub">Track where your money goes.</div>
+
+<div class="grid-form-list">
+  <div class="card">
+    <div class="card-title">{{ 'Edit Expense' if edit_record else 'Add Expense' }}</div>
+    <form method="post" action="{{ url_for('expense_save') }}" class="form-grid">
+      {% if edit_record %}<input type="hidden" name="expense_id" value="{{ edit_record.expense_id }}">{% endif %}
+      <select class="field" name="category_id">
+        {% for c in categories %}
+          <option value="{{ c.category_id }}" {{ 'selected' if edit_record and edit_record.category_id == c.category_id else '' }}>
+            {{ c.icon }} {{ c.name }}
+          </option>
+        {% endfor %}
+      </select>
+      <input class="field" type="number" step="0.01" name="amount" placeholder="Amount"
+             value="{{ edit_record.amount if edit_record else '' }}" required>
+      <input class="field" type="text" name="payee" placeholder="Paid to (e.g. Zomato)"
+             value="{{ edit_record.payee if edit_record else '' }}" required>
+      <select class="field" name="payment_mode">
+        {% for mode in payment_modes %}
+          <option value="{{ mode }}" {{ 'selected' if edit_record and edit_record.payment_mode == mode else '' }}>{{ mode }}</option>
+        {% endfor %}
+      </select>
+      <input class="field" type="date" name="date" value="{{ edit_record.date if edit_record else today }}" required>
+      <input class="field" type="text" name="note" placeholder="Note (optional)"
+             value="{{ edit_record.note if edit_record else '' }}">
+      <div class="btn-row">
+        <button class="btn-save expense" type="submit">Save</button>
+        {% if edit_record %}<a class="btn-cancel" href="{{ url_for('expense_page') }}">Cancel</a>{% endif %}
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-title">All Expense Records</div>
+    {% if records %}
+      {% for r in records %}
+        <div class="row-item">
+          <span class="icon">{{ r.category_icon or '💸' }}</span>
+          <div class="info">
+            <div class="label">{{ r.payee }}</div>
+            <div class="sub">{{ r.category_name or 'Uncategorized' }} • {{ r.payment_mode }} • {{ pretty_date(r.date) }}</div>
+          </div>
+          <div class="amt" style="color:var(--danger)">-{{ fmt(r.amount, currency) }}</div>
+          <a class="icon-btn" href="{{ url_for('expense_edit', expense_id=r.expense_id) }}">✏</a>
+          <form method="post" action="{{ url_for('expense_delete', expense_id=r.expense_id) }}"
+                onsubmit="return confirm('Delete this expense record?');" style="display:inline;">
+            <button class="icon-btn danger" type="submit">🗑</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">No expense records yet.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} — Dashboard{% endblock %}
+{% block content %}
+<div class="page-title">Welcome back, {{ current_user.full_name.split(' ')[0] }} 👋</div>
+<div class="page-sub">Here's your financial snapshot for this month.</div>
+
+<div class="cards-row">
+  <div class="stat-card">
+    <div class="stat-label">📈 Total Income</div>
+    <div class="stat-value" style="color:var(--success)">{{ fmt(income_total, currency) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">📉 Total Expense</div>
+    <div class="stat-value" style="color:var(--danger)">{{ fmt(expense_total, currency) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">🏦 Balance</div>
+    <div class="stat-value" style="color:var(--primary)">{{ fmt(balance, currency) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">🎯 Budget Left</div>
+    <div class="stat-value" style="color:var(--warning)">
+      {{ fmt(budget_left, currency) if budget else 'No limit set' }}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Monthly Budget Usage</div>
+  <div class="progress-track">
+    <div class="progress-fill" style="width:{{ pct }}%;background:{{ 'var(--danger)' if pct >= 90 else ('var(--warning)' if pct >= 70 else 'var(--success)') }}"></div>
+  </div>
+  <div style="font-size:11px;color:var(--text-muted)">
+    {% if budget %}
+      {{ fmt(expense_total, currency) }} of {{ fmt(budget, currency) }} spent ({{ "%.0f"|format(pct) }}%)
+    {% else %}
+      Set a monthly budget in Settings to track usage.
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Recent Transactions</div>
+  {% if recent %}
+    {% for tx in recent %}
+      <div class="row-item">
+        <span class="icon">{{ '🟢' if tx.kind == 'income' else '🔴' }}</span>
+        <div class="info">
+          <div class="label">{{ tx.label }}</div>
+          <div class="sub">{{ pretty_date(tx.date) }}</div>
+        </div>
+        <div class="amt" style="color:{{ 'var(--success)' if tx.kind == 'income' else 'var(--danger)' }}">
+          {{ '+' if tx.kind == 'income' else '-' }}{{ fmt(tx.amount, currency) }}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">No transactions yet. Add your first one!</div>
+  {% endif %}
+</div>
+{% endblock %}

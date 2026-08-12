@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %} — Analytics{% endblock %}
+{% block content %}
+<div class="page-title">Analytics</div>
+<div class="page-sub">Visualize your spending patterns.</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">Expense by Category</div>
+    <div style="position:relative;height:260px;">
+      <canvas id="pieCanvas" role="img" aria-label="Pie chart of expenses by category"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Monthly Trend</div>
+    <div style="position:relative;height:260px;">
+      <canvas id="trendCanvas" role="img" aria-label="Bar chart of income versus expense by month"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+const chartData = {{ chart_data | tojson }};
+const palette = ['#4C6FFF','#2ECC71','#FFB020','#FF5C5C','#9B59B6','#1ABC9C','#E67E22','#3498DB','#E84393'];
+
+new Chart(document.getElementById('pieCanvas'), {
+  type: 'doughnut',
+  data: {
+    labels: chartData.pie_labels.length ? chartData.pie_labels : ['No data'],
+    datasets: [{
+      data: chartData.pie_values.length ? chartData.pie_values : [1],
+      backgroundColor: chartData.pie_values.length ? palette : ['#262C36'],
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { color: '#EAEAEA', font: { size: 10 } } } }
+  }
+});
+
+new Chart(document.getElementById('trendCanvas'), {
+  type: 'line',
+  data: {
+    labels: chartData.trend_labels.length ? chartData.trend_labels : ['No data'],
+    datasets: [
+      { label: 'Income', data: chartData.trend_income, borderColor: '#2ECC71', backgroundColor: '#2ECC71', tension: 0.3 },
+      { label: 'Expense', data: chartData.trend_expense, borderColor: '#FF5C5C', backgroundColor: '#FF5C5C', tension: 0.3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { color: '#8A94A6' }, grid: { color: '#262C36' } },
+      y: { ticks: { color: '#8A94A6' }, grid: { color: '#262C36' } },
+    },
+    plugins: { legend: { position: 'bottom', labels: { color: '#EAEAEA', font: { size: 10 } } } }
+  }
+});
+</script>
+{% endblock %}

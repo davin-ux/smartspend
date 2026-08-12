@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %} — Profile{% endblock %}
+{% block content %}
+<div class="page-title">Profile</div>
+<div class="page-sub">Manage your personal information.</div>
+
+<div class="two-col">
+  <div class="card" style="text-align:center;">
+    <div style="font-size:48px;">👤</div>
+    <div style="font-size:17px;font-weight:700;margin-top:6px;">{{ current_user.full_name }}</div>
+    <div style="font-size:12px;color:var(--text-muted);">@{{ current_user.username }}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:16px;">
+      Member since {{ current_user.created_at.strftime('%d %b %Y') if current_user.created_at else '' }}
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-title">Edit Information</div>
+      <form method="post" action="{{ url_for('profile_page') }}" class="form-grid">
+        <input type="hidden" name="form_name" value="info">
+        <input class="field" type="text" name="full_name" value="{{ current_user.full_name }}" placeholder="Full name" required>
+        <input class="field" type="email" name="email" value="{{ current_user.email }}" placeholder="Email" required>
+        <button class="btn-save primary" type="submit">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Change Password</div>
+      <form method="post" action="{{ url_for('profile_page') }}" class="form-grid">
+        <input type="hidden" name="form_name" value="password">
+        <input class="field" type="password" name="old_password" placeholder="Current password" required>
+        <input class="field" type="password" name="new_password" placeholder="New password" required>
+        <input class="field" type="password" name="confirm_password" placeholder="Confirm new password" required>
+        <button class="btn-save warn" type="submit">Update Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

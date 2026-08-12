@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ APP_NAME }}{% block title %}{% endblock %}</title>
+<link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% if current_user %}<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>{% endif %}
+</head>
+<body>
+
+{% if not current_user %}
+  {% block auth_content %}{% endblock %}
+{% else %}
+<div id="appScreen" class="active">
+  <div class="sidebar">
+    <div class="brand"><span>💰</span><span>SmartSpend</span></div>
+    <div class="brand-sub">@{{ current_user.username }}</div>
+    <div class="nav-list">
+      {% set nav_items = [
+        ('dashboard', '🏠', 'Dashboard'), ('income_page', '💵', 'Income'),
+        ('expense_page', '💳', 'Expense'), ('reports_page', '📄', 'Reports'),
+        ('analytics_page', '📊', 'Analytics'), ('profile_page', '👤', 'Profile'),
+        ('settings_page', '⚙️', 'Settings')] %}
+      {% for endpoint, icon, label in nav_items %}
+        <a class="nav-btn {{ 'active' if request.endpoint == endpoint else '' }}"
+           href="{{ url_for(endpoint) }}"><span>{{ icon }}</span><span>{{ label }}</span></a>
+      {% endfor %}
+    </div>
+    <a class="logout-btn" href="{{ url_for('logout') }}" title="Log out">
+      <span>↪</span><span>Log out</span>
+    </a>
+  </div>
+
+  <div style="flex:1;min-width:0;">
+    <div class="mobile-topbar">
+      <div class="brand" style="padding:0;">💰 SmartSpend</div>
+      <a class="mobile-logout" href="{{ url_for('logout') }}" aria-label="Log out">↪</a>
+    </div>
+    <div class="mobile-nav">
+      {% for endpoint, icon, label in nav_items %}
+        <a class="nav-btn {{ 'active' if request.endpoint == endpoint else '' }}"
+           href="{{ url_for(endpoint) }}"><span>{{ icon }}</span><span>{{ label }}</span></a>
+      {% endfor %}
+    </div>
+
+    <div class="content">
+      <div class="content-inner">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+</body>
+</html>

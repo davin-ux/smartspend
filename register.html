@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} — Sign Up{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-title">Create your account</div>
+    <div class="auth-sub">Start tracking your money in minutes.</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('register') }}">
+      <input class="field" type="text" name="full_name" placeholder="Full name" required>
+      <input class="field" type="text" name="username" placeholder="Username (3-20 chars)" required>
+      <input class="field" type="email" name="email" placeholder="Email" required>
+      <input class="field" type="password" name="password" placeholder="Password" required>
+      <input class="field" type="password" name="confirm_password" placeholder="Confirm password" required>
+      <button class="btn-primary" type="submit">Sign Up</button>
+    </form>
+    <div class="switch-line">Already have an account? <a class="switch-link" href="{{ url_for('login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}
